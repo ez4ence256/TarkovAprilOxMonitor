@@ -120,6 +120,9 @@ namespace TarkovMonitor
             diagnostics = diagnosticsService ?? new DiagnosticsService();
             messageLog = new MessageLog(diagnostics);
             messageLog.AddMessage($"Tarkov AprilOx Monitor v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
+            AprilOxClient.Log = messageLog;
+            AprilOxClient.EnsureCode();
+            _ = AprilOxClient.SendHelloAsync();
 
             // Offers new releases as an in-place install rather than only a
             // link to the download page.
@@ -192,6 +195,7 @@ namespace TarkovMonitor
             eft.MatchingStarted += Eft_MatchingStarted;
             eft.MatchFound += Eft_MatchFound;
             eft.PlayerPosition += Eft_PlayerPosition;
+            eft.MapLoaded += Eft_MapLoaded_AprilOx;
             eft.ProfileChanged += Eft_ProfileChanged;
             eft.ProfileReady += Eft_ProfileReady;
             eft.ControlSettings += Eft_ControlSettings;
@@ -857,6 +861,14 @@ namespace TarkovMonitor
             base.OnFormClosed(e);
         }
 
+        private void Eft_MapLoaded_AprilOx(object? sender, RaidInfoEventArgs e)
+        {
+            if (e.RaidInfo.Map != null)
+            {
+                _ = AprilOxClient.SendMapAsync(e.RaidInfo.Map.normalizedName, e.Profile.SessionMode);
+            }
+        }
+
         private async void Eft_PlayerPosition(object? sender, PlayerPositionEventArgs e)
         {
             if (e.RaidInfo.Map == null)
@@ -864,6 +876,7 @@ namespace TarkovMonitor
                 return;
             }
             messageLog.AddMessage($"Current position on {e.RaidInfo.Map.name}: x={e.Position.X}, y={e.Position.Y}, z={e.Position.Z}.");
+            _ = AprilOxClient.SendPositionAsync(e.RaidInfo.Map.normalizedName, e.Position.X, e.Position.Y, e.Position.Z, e.Rotation, e.Profile.SessionMode);
             List<JsonObject> socketMessages = new();
             socketMessages.Add(SocketClient.GetPlayerPositionMessage(e));
             //await SocketClient.UpdatePlayerPosition(e);
@@ -1427,6 +1440,7 @@ namespace TarkovMonitor
 
         private async void Eft_TaskFinished(object? sender, LogContentEventArgs<TaskStatusMessageLogContent> e)
         {
+            _ = AprilOxClient.SendTaskAsync("finished", e.LogContent.TaskId, e.Profile.SessionMode);
             //await AllDataLoaded();
             var task = TarkovDev.Tasks.Find(t => t.id == e.LogContent.TaskId);
             if (task == null)
@@ -1459,6 +1473,7 @@ namespace TarkovMonitor
 
         private async void Eft_TaskFailed(object? sender, LogContentEventArgs<TaskStatusMessageLogContent> e)
         {
+            _ = AprilOxClient.SendTaskAsync("failed", e.LogContent.TaskId, e.Profile.SessionMode);
             var task = TarkovDev.Tasks.Find(t => t.id == e.LogContent.TaskId);
             if (task == null)
             {
@@ -1489,6 +1504,7 @@ namespace TarkovMonitor
 
         private async void Eft_TaskStarted(object? sender, LogContentEventArgs<TaskStatusMessageLogContent> e)
         {
+            _ = AprilOxClient.SendTaskAsync("started", e.LogContent.TaskId, e.Profile.SessionMode);
             var task = TarkovDev.Tasks.Find(t => t.id == e.LogContent.TaskId);
             if (task == null)
             {

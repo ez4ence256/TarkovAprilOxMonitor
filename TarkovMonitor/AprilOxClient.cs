@@ -55,11 +55,13 @@ namespace TarkovMonitor
             Properties.Settings.Default.Save();
         }
 
-        /// <summary>"regular" or "pve"; null when the mode is not known (the event must not be sent).</summary>
+        /// <summary>Site game mode ("regular", "pve", "pvp-season"); null when unknown (the event must not be sent).</summary>
         public static string? GameMode(EftSessionMode mode) => mode switch
         {
             EftSessionMode.PVE => "pve",
             EftSessionMode.Regular => "regular",
+            // the site keeps PvP Season progress apart from regular PvP
+            EftSessionMode.Seasonal => "pvp-season",
             _ => null,
         };
 

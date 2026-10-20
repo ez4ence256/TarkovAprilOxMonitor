@@ -13,7 +13,8 @@ This program is free software licensed under the GNU General Public License v3.0
 ## Modifications (2026-10-20)
 
 Changes made to the original TarkovMonitor (GPL-3.0 section 5a):
-
+
+- Removed `TarkovMonitor.Package` (Microsoft Store MSIX wrapper carrying the original publisher identity, unused by this fork).
 - Renamed the product and the assembly to `TarkovAprilOxMonitor` (window and tray titles, executable name, release archive `TarkovAprilOxMonitor.zip`). The C# root namespace stays `TarkovMonitor` to ease merging upstream.
 - The update checker and the in-app updater now look at the releases of `ez4ence256/TarkovAprilOxMonitor` instead of `the-hideout/TarkovMonitor`; the "Report" button opens this fork's issue tracker.
 - HTTP User-Agent is now `TarkovAprilOxMonitor/<version>` (derived from the assembly name); tarkov.dev calls are unchanged.
@@ -40,7 +41,7 @@ Requires the .NET 10 SDK on Windows.
 dotnet build TarkovMonitor/TarkovMonitor.csproj -c Release
 ```
 
-The executable is written to `TarkovMonitor/bin/Release/net10.0-windows10.0.17763.0/TarkovAprilOxMonitor.exe`. The `TarkovMonitor.Package` MSIX project keeps the original publisher identity and is not part of this fork's build.
+The executable is written to `TarkovMonitor/bin/Release/net10.0-windows10.0.17763.0/TarkovAprilOxMonitor.exe`.
 
 ---
 

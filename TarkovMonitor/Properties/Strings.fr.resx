@@ -429,4 +429,10 @@
   <data name="AprilOxCopied" xml:space="preserve">
     <value>Code d'appairage copié dans le presse-papiers.</value>
   </data>
+  <data name="ReadPastLogsTargetPlanner" xml:space="preserve">
+    <value>Tarkov Quest Planner</value>
+  </data>
+  <data name="ReadPastLogsTargetTarkovTracker" xml:space="preserve">
+    <value>TarkovTracker.org</value>
+  </data>
 </root>

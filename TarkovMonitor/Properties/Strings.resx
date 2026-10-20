@@ -441,4 +441,10 @@
   <data name="AprilOxCopied" xml:space="preserve">
     <value>Pairing code copied to the clipboard.</value>
   </data>
+  <data name="ReadPastLogsTargetPlanner" xml:space="preserve">
+    <value>Tarkov Quest Planner</value>
+  </data>
+  <data name="ReadPastLogsTargetTarkovTracker" xml:space="preserve">
+    <value>TarkovTracker.org</value>
+  </data>
 </root>

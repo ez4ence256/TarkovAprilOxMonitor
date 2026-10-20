@@ -124,6 +124,60 @@ namespace TarkovMonitor
             }
         }
 
+        /// <summary>True when AprilOx is enabled with a valid site URL and pairing code.</summary>
+        public static bool IsConfigured =>
+            Properties.Settings.Default.aprilOxEnabled
+            && NormalizeSiteUrl(Properties.Settings.Default.aprilOxSiteUrl) != null
+            && IsValidCode(Properties.Settings.Default.aprilOxCode);
+
+        /// <summary>
+        /// Sends the past-logs batch (chunks of 1000, in order). Unlike <see cref="SendAsync"/> it reports the outcome:
+        /// returns null on success, otherwise a message safe to display (never contains the code or URL).
+        /// </summary>
+        public static async Task<string?> SendPastTasksAsync(string gameMode, IReadOnlyList<(string TaskId, string Status)> tasks)
+        {
+            if (!IsConfigured)
+            {
+                return "Tarkov Quest Planner is not connected: enable it and check the pairing code in Settings.";
+            }
+            var settings = Properties.Settings.Default;
+            var url = $"{NormalizeSiteUrl(settings.aprilOxSiteUrl)}/api/monitor/{settings.aprilOxCode}";
+            try
+            {
+                for (var i = 0; i < tasks.Count; i += 1000)
+                {
+                    if (DateTime.UtcNow < skipUntilUtc)
+                    {
+                        return "Tarkov Quest Planner asked to slow down (HTTP 429). Try again in a minute.";
+                    }
+                    var array = new JsonArray();
+                    foreach (var (taskId, status) in tasks.Skip(i).Take(1000))
+                    {
+                        array.Add(new JsonObject { ["taskId"] = taskId, ["status"] = status });
+                    }
+                    var evt = new JsonObject { ["v"] = 1, ["type"] = "tasks", ["source"] = "pastLogs", ["gameMode"] = gameMode, ["tasks"] = array };
+                    using var content = new StringContent(evt.ToJsonString(), Encoding.UTF8, "application/json");
+                    using var response = await client.PostAsync(url, content).ConfigureAwait(false);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        continue;
+                    }
+                    if (response.StatusCode == HttpStatusCode.TooManyRequests)
+                    {
+                        var wait = response.Headers.RetryAfter?.Delta ?? TimeSpan.FromSeconds(60);
+                        skipUntilUtc = DateTime.UtcNow + (wait > TimeSpan.FromMinutes(5) ? TimeSpan.FromMinutes(5) : wait);
+                    }
+                    return $"Tarkov Quest Planner refused the past task updates (HTTP {(int)response.StatusCode}).";
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                // Exception messages can contain the request URL, which holds the code: report the type only.
+                return $"Tarkov Quest Planner is unreachable ({ex.GetType().Name}).";
+            }
+        }
+
         private static void ReportError(string message)
         {
             // At most one board line per minute so a dead site does not flood the board with position events.

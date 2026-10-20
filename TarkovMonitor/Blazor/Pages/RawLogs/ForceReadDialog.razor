@@ -37,6 +37,10 @@
                         <MudSelectItem Value="@breakpoint">@breakpoint.Profile.DisplayName | @breakpoint.Version | @breakpoint.Date.ToLongDateString() - @breakpoint.Date.Humanize()</MudSelectItem>
                     }
                 </MudSelect>
+                <MudRadioGroup T="bool" @bind-Value="toPlanner" Disabled="@IsProcessing">
+                    <MudRadio T="bool" Value="true" Dense="true">@LocalizationService.GetString("ReadPastLogsTargetPlanner")</MudRadio>
+                    <MudRadio T="bool" Value="false" Dense="true">@LocalizationService.GetString("ReadPastLogsTargetTarkovTracker")</MudRadio>
+                </MudRadioGroup>
                 <p>@LocalizationService.GetString("SelectStartingPointDescription")</p>
                 <p><strong>@LocalizationService.GetString("WarningMessage")</strong></p>
             }
@@ -83,6 +87,8 @@
     List<LogDetails>? breakpoints;
     bool SubmitDisabled { get; set; } = true;
     bool IsProcessing { get; set; }
+    // true = Tarkov Quest Planner, false = TarkovTracker.org
+    bool toPlanner = AprilOxClient.IsConfigured;
 
     private string lastProfileName = TarkovDev.LastLoadedProfile?.AccountId
         ?? "";
@@ -159,6 +165,11 @@
             messageLog.AddMessage(
                 "Read Past Logs was not started because Escape from Tarkov is running. Close EFT before importing historical task updates.",
                 "warning");
+            return;
+        }
+        if (toPlanner)
+        {
+            await SubmitToPlanner(breakpoint);
             return;
         }
         if (!breakpoint.Profile.HasIdentity || !breakpoint.Profile.SupportsTarkovTrackerWrites)
@@ -336,6 +347,119 @@
             {
                 TarkovTracker.ReleaseProfileLease(trackerLease);
             }
+            IsProcessing = false;
+            SubmitDisabled = selectedBreakpoint == null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task SubmitToPlanner(LogDetails breakpoint)
+    {
+        if (!AprilOxClient.IsConfigured)
+        {
+            messageLog.AddMessage("Tarkov Quest Planner is not connected: enable it and check the pairing code in Settings.", "warning");
+            return;
+        }
+        var gameMode = AprilOxClient.GameMode(breakpoint.Profile.SessionMode);
+        if (gameMode == null)
+        {
+            messageLog.AddMessage($"Tarkov Quest Planner does not support {breakpoint.Profile.DisplayName} task updates. No updates were sent.", "warning");
+            return;
+        }
+
+        var handlerAttached = false;
+        var startedUtc = DateTime.UtcNow;
+        var observedTaskStatuses = new Dictionary<string, TarkovMonitor.TaskStatus>();
+        var observedTaskSequence = new Dictionary<string, int>();
+        var observedTaskLock = new object();
+        var nextObservedTaskSequence = 0;
+        EventHandler<LogContentEventArgs<TaskStatusMessageLogContent>>? taskHandler = null;
+        IsProcessing = true;
+        SubmitDisabled = true;
+        await InvokeAsync(StateHasChanged);
+        try
+        {
+            var tasks = new List<(string TaskId, string Status)>();
+            try
+            {
+                var historicalTasks = await TarkovDev.GetTasks(breakpoint.Profile.Type);
+                GameWatcher.ReadingPastLogs = true;
+                taskHandler = (_, e) =>
+                {
+                    if (!string.Equals(e.Profile.AccountId, breakpoint.Profile.AccountId, StringComparison.Ordinal)
+                        || !string.Equals(e.Profile.Id, breakpoint.Profile.Id, StringComparison.Ordinal)
+                        || e.Profile.SessionMode != breakpoint.Profile.SessionMode)
+                    {
+                        return;
+                    }
+
+                    lock (observedTaskLock)
+                    {
+                        observedTaskStatuses[e.LogContent.TaskId] = e.LogContent.Status;
+                        observedTaskSequence[e.LogContent.TaskId] = nextObservedTaskSequence++;
+                    }
+                };
+                customWatcher.TaskModified += taskHandler;
+                handlerAttached = true;
+                await Task.Run(() => customWatcher.ProcessLogsFromBreakpoint(breakpoint));
+
+                KeyValuePair<string, TarkovMonitor.TaskStatus>[] observedTasks;
+                lock (observedTaskLock)
+                {
+                    observedTasks = observedTaskStatuses
+                        .OrderBy(item => observedTaskSequence[item.Key])
+                        .ToArray();
+                }
+                foreach (var kvp in observedTasks)
+                {
+                    var status = kvp.Value switch
+                    {
+                        TarkovMonitor.TaskStatus.Started => "started",
+                        TarkovMonitor.TaskStatus.Finished => "finished",
+                        TarkovMonitor.TaskStatus.Failed => "failed",
+                        _ => null,
+                    };
+                    if (status != null && historicalTasks.Any((t) => t.id == kvp.Key))
+                    {
+                        tasks.Add((kvp.Key, status));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                messageLog.AddException("Past-log task updates could not be compiled.", "TM-LOG-001", "CompileTaskUpdates", ex, "LogParser", "PastLogs", durationMilliseconds: DiagnosticsService.ElapsedMilliseconds(startedUtc));
+                return;
+            }
+            finally
+            {
+                GameWatcher.ReadingPastLogs = false;
+                if (handlerAttached && taskHandler != null)
+                {
+                    customWatcher.TaskModified -= taskHandler;
+                }
+            }
+
+            if (eft.IsGameRunning)
+            {
+                messageLog.AddMessage("Read Past Logs was cancelled because Escape from Tarkov started before task updates were sent.", "warning");
+                return;
+            }
+            if (tasks.Count == 0)
+            {
+                messageLog.AddMessage("No task updates were found in the selected logs.", "info");
+                return;
+            }
+            var error = await AprilOxClient.SendPastTasksAsync(gameMode, tasks);
+            if (error != null)
+            {
+                messageLog.AddMessage(error, "warning");
+                return;
+            }
+            messageLog.AddMessage($"Sent {tasks.Count} past task updates to Tarkov Quest Planner.", "info");
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        finally
+        {
             IsProcessing = false;
             SubmitDisabled = selectedBreakpoint == null;
             await InvokeAsync(StateHasChanged);

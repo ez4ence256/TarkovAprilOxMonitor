@@ -20,6 +20,7 @@ Changes made to the original TarkovMonitor (GPL-3.0 section 5a):
 - Local diagnostics now live in `%LOCALAPPDATA%\TarkovAprilOxMonitor\Diagnostics`. The application has no telemetry: diagnostics are only written locally and copied by the user.
 - New settings `aprilOxEnabled`, `aprilOxSiteUrl`, `aprilOxCode` and a "Tarkov Quest Planner (AprilOx)" card in Settings (enable switch, site URL, pairing code with Copy / Regenerate, "Open connected site").
 - New `AprilOxClient` that POSTs task (started / finished / failed), map and position events, plus a `hello` event, to `{siteUrl}/api/monitor/{code}`. Events are sent only for live game activity (never while old logs are read at startup) and only when the game mode (regular or PVE) is known.
+- The "Read past log files" dialog can now send the past quest statuses to Tarkov Quest Planner (default when connected, no TarkovTracker token needed) as one batched `tasks` event; the TarkovTracker.org target is unchanged.
 - GitHub workflows and this README adapted to the new names.
 
 ## Connect to Tarkov Quest Planner

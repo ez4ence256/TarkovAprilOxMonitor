@@ -1,12 +1,48 @@
-# TarkovMonitor
+# Tarkov AprilOx Monitor
 
-[![build-dev](https://github.com/the-hideout/TarkovMonitor/actions/workflows/build-dev.yml/badge.svg)](https://github.com/the-hideout/TarkovMonitor/actions/workflows/build-dev.yml)
+**Unofficial fork of [the-hideout/TarkovMonitor](https://github.com/the-hideout/TarkovMonitor). It is not affiliated with, endorsed by or supported by the-hideout or tarkov.dev.** Please do not report problems of this fork to the original project; use the [issues of this repository](https://github.com/ez4ence256/TarkovAprilOxMonitor/issues).
 
-[![Discord](https://img.shields.io/discord/956236955815907388?color=7388DA&label=Discord)](https://discord.gg/XPAsKGHSzH)
+Tarkov AprilOx Monitor keeps every feature of TarkovMonitor (audio notifications, TarkovTracker sync, tarkov.dev remote, timers, groups...) and additionally sends your quest and position events to [Tarkov Quest Planner](https://tarkov.aprilox.fr).
 
-![image](https://github.com/the-hideout/TarkovMonitor/assets/1557581/99602d29-98c8-4738-8757-0fa763d54e9a)
+Original authors and contributors: the-hideout and the TarkovMonitor contributors. All original copyright notices are kept.
 
-TarkovMonitor is an Escape from Tarkov companion application that provides useful audio notifications, can automatically update your task progress on Tarkov Tracker, and includes other helpful features.
+## License
+
+This program is free software licensed under the GNU General Public License v3.0 (see [LICENSE.txt](LICENSE.txt)). It comes with ABSOLUTELY NO WARRANTY. You may redistribute and modify it under the terms of the GPL-3.0; modified versions must stay under the same license and ship their source.
+
+## Modifications (2026-10-20)
+
+Changes made to the original TarkovMonitor (GPL-3.0 section 5a):
+
+- Renamed the product and the assembly to `TarkovAprilOxMonitor` (window and tray titles, executable name, release archive `TarkovAprilOxMonitor.zip`). The C# root namespace stays `TarkovMonitor` to ease merging upstream.
+- The update checker and the in-app updater now look at the releases of `ez4ence256/TarkovAprilOxMonitor` instead of `the-hideout/TarkovMonitor`; the "Report" button opens this fork's issue tracker.
+- HTTP User-Agent is now `TarkovAprilOxMonitor/<version>` (derived from the assembly name); tarkov.dev calls are unchanged.
+- Local diagnostics now live in `%LOCALAPPDATA%\TarkovAprilOxMonitor\Diagnostics`. The application has no telemetry: diagnostics are only written locally and copied by the user.
+- New settings `aprilOxEnabled`, `aprilOxSiteUrl`, `aprilOxCode` and a "Tarkov Quest Planner (AprilOx)" card in Settings (enable switch, site URL, pairing code with Copy / Regenerate, "Open connected site").
+- New `AprilOxClient` that POSTs task (started / finished / failed), map and position events, plus a `hello` event, to `{siteUrl}/api/monitor/{code}`. Events are sent only for live game activity (never while old logs are read at startup) and only when the game mode (regular or PVE) is known.
+- GitHub workflows and this README adapted to the new names.
+
+## Connect to Tarkov Quest Planner
+
+1. Start Tarkov AprilOx Monitor and open **Settings**, card **Tarkov Quest Planner (AprilOx)**.
+2. Click **Open connected site**; the site asks you to confirm the pairing code. Or copy the pairing code with the copy button and enter it on the site.
+3. Play: started / finished / failed quests, the map you load into and your position (take an in-game screenshot) show up on the site in real time.
+
+The pairing code is the only secret protecting your feed: do not share it. Use **Regenerate code** if it leaks.
+
+## Building
+
+Requires the .NET 10 SDK on Windows.
+
+```
+dotnet build TarkovMonitor/TarkovMonitor.csproj -c Release
+```
+
+The executable is written to `TarkovMonitor/bin/Release/net10.0-windows10.0.17763.0/TarkovAprilOxMonitor.exe`. The `TarkovMonitor.Package` MSIX project keeps the original publisher identity and is not part of this fork's build.
+
+---
+
+The text below comes from the original README.
 
 ## Features
 
@@ -36,11 +72,11 @@ TarkovMonitor is an Escape from Tarkov companion application that provides usefu
 
 ## Installation
 
-Head on over to the [latest release](https://github.com/the-hideout/TarkovMonitor/releases/latest) page for this project. Once you are there, you'll see an `Assets` section and you'll want to download the `TarkovMonitor.zip` link:
+Head on over to the [latest release](https://github.com/ez4ence256/TarkovAprilOxMonitor/releases/latest) page for this project. Once you are there, you'll see an `Assets` section and you'll want to download the `TarkovAprilOxMonitor.zip` link:
 
 <img width="845" alt="Screenshot 2023-08-10 at 7 58 36 PM" src="https://github.com/the-hideout/TarkovMonitor/assets/23362539/86fbb000-25a3-4d71-bf39-45d622d61e8e">
 
-Once downloaded, extract the zip and run the `TarkovMonitor.exe` executable included within the bundle. Enjoy!
+Once downloaded, extract the zip and run the `TarkovAprilOxMonitor.exe` executable included within the bundle. Enjoy!
 
 ## Setup
 

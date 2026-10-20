@@ -381,6 +381,28 @@
 
     <MudItem xs="12" lg="6" xl="4">
         <MudPaper Class="app-surface pa-2 ma-2 mx-4" Elevation="3">
+            <MudStack Row="true"
+                Justify="Justify.SpaceBetween"
+                AlignItems="AlignItems.Center"
+                Class="w-100">
+                <MudText Typo="Typo.h6" Class="d-flex align-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Link" Class="mr-2" />
+                    <span class="tm-card-heading-text">@LocalizationService.GetString("AprilOxTitle")</span>
+                </MudText>
+                <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Info" StartIcon="@Icons.Material.Filled.OpenInBrowser" Class="align-right" OnClick="OpenAprilOxSite" Disabled="@(AprilOxSiteUrlError != null)">@LocalizationService.GetString("AprilOxOpenSite")</MudButton>
+            </MudStack>
+            <MudText Typo="Typo.caption">@LocalizationService.GetString("AprilOxHelp")</MudText>
+            <div>
+                <MudSwitch @bind-Value="@AprilOxEnabled" Label="@LocalizationService.GetString("AprilOxEnable")" Color="Color.Info" />
+            </div>
+            <MudTextField @bind-Value="@AprilOxSiteUrl" Immediate="true" Error="@(AprilOxSiteUrlError != null)" ErrorText="@AprilOxSiteUrlError" Label="@LocalizationService.GetString("AprilOxSiteUrl")" Variant="Variant.Outlined" Margin="Margin.Dense" Class="tm-input tm-input--full"></MudTextField>
+            <MudTextField Value="@AprilOxCode" ReadOnly="true" Label="@LocalizationService.GetString("AprilOxCode")" Variant="Variant.Outlined" Margin="Margin.Dense" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.ContentCopy" OnAdornmentClick="CopyAprilOxCode" Class="tm-input tm-input--full"></MudTextField>
+            <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Warning" StartIcon="@Icons.Material.Filled.Refresh" OnClick="RegenerateAprilOxCode">@LocalizationService.GetString("AprilOxRegenerate")</MudButton>
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12" lg="6" xl="4">
+        <MudPaper Class="app-surface pa-2 ma-2 mx-4" Elevation="3">
             <MudText Typo="Typo.h6" Class="d-flex align-center"><MudIcon Icon="@Icons.Material.Filled.Folder" Class="mr-2" /><span class="tm-card-heading-text">@LocalizationService.GetString("LogsFolder")</span></MudText><MudText>@LocalizationService.GetString("DontChangeThisUnlessYouReallyKnowWhatYoureDoing")</MudText>
             <MudTextField @bind-Value="@CustomLogsFolder" ReadOnly="true" Variant="Variant.Outlined" Margin="Margin.Dense" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.FolderOpen" OnAdornmentClick="CustomLogsFolderClick" Class="tm-input tm-input--field tm-input--full"></MudTextField>
             @if (Properties.Settings.Default.customLogsPath != null && Properties.Settings.Default.customLogsPath != "")
@@ -1556,6 +1578,49 @@
             }
             OpenURL($"https://tarkov.dev?connection={RemoteID}");
         });
+    }
+    private string? AprilOxSiteUrlError => AprilOxClient.NormalizeSiteUrl(Properties.Settings.Default.aprilOxSiteUrl) == null
+        ? LocalizationService.GetString("AprilOxSiteUrlInvalid")
+        : null;
+    public string AprilOxSiteUrl
+    {
+        get => Properties.Settings.Default.aprilOxSiteUrl;
+        set
+        {
+            Properties.Settings.Default.aprilOxSiteUrl = AprilOxClient.NormalizeSiteUrl(value) ?? value;
+            Properties.Settings.Default.Save();
+            _ = AprilOxClient.SendHelloAsync();
+        }
+    }
+    public bool AprilOxEnabled
+    {
+        get => Properties.Settings.Default.aprilOxEnabled;
+        set
+        {
+            Properties.Settings.Default.aprilOxEnabled = value;
+            Properties.Settings.Default.Save();
+            _ = AprilOxClient.SendHelloAsync();
+        }
+    }
+    public string AprilOxCode => Properties.Settings.Default.aprilOxCode;
+    void CopyAprilOxCode()
+    {
+        Clipboard.SetText(AprilOxCode);
+        messageLog.AddMessage(LocalizationService.GetString("AprilOxCopied"), "info");
+    }
+    void RegenerateAprilOxCode()
+    {
+        Properties.Settings.Default.aprilOxCode = RemoteCode.Generate(16);
+        Properties.Settings.Default.Save();
+        _ = AprilOxClient.SendHelloAsync();
+    }
+    void OpenAprilOxSite()
+    {
+        var siteUrl = AprilOxClient.NormalizeSiteUrl(Properties.Settings.Default.aprilOxSiteUrl);
+        if (siteUrl != null && AprilOxClient.IsValidCode(AprilOxCode))
+        {
+            OpenURL($"{siteUrl}/?monitor={AprilOxCode}");
+        }
     }
     public bool NavigateMapSwitch
     {

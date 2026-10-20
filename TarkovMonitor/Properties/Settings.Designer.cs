@@ -430,5 +430,41 @@ namespace TarkovMonitor.Properties {
                 this["floatingTimerPanelShowRunThrough"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool aprilOxEnabled {
+            get {
+                return ((bool)(this["aprilOxEnabled"]));
+            }
+            set {
+                this["aprilOxEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://tarkov.aprilox.fr")]
+        public string aprilOxSiteUrl {
+            get {
+                return ((string)(this["aprilOxSiteUrl"]));
+            }
+            set {
+                this["aprilOxSiteUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string aprilOxCode {
+            get {
+                return ((string)(this["aprilOxCode"]));
+            }
+            set {
+                this["aprilOxCode"] = value;
+            }
+        }
     }
 }

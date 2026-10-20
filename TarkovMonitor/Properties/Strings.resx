@@ -414,4 +414,31 @@
   <data name="WebsiteAlreadyConnectedMsg" xml:space="preserve">
     <value>The website is already connected</value>
   </data>
+  <data name="AprilOxTitle" xml:space="preserve">
+    <value>Tarkov Quest Planner (AprilOx)</value>
+  </data>
+  <data name="AprilOxHelp" xml:space="preserve">
+    <value>Sends quest and position events to your Tarkov Quest Planner page. Click "Open connected site" or paste the pairing code in the site.</value>
+  </data>
+  <data name="AprilOxEnable" xml:space="preserve">
+    <value>Send events to Tarkov Quest Planner</value>
+  </data>
+  <data name="AprilOxSiteUrl" xml:space="preserve">
+    <value>Site URL</value>
+  </data>
+  <data name="AprilOxSiteUrlInvalid" xml:space="preserve">
+    <value>Enter a valid http:// or https:// URL.</value>
+  </data>
+  <data name="AprilOxCode" xml:space="preserve">
+    <value>Pairing code</value>
+  </data>
+  <data name="AprilOxRegenerate" xml:space="preserve">
+    <value>Regenerate code</value>
+  </data>
+  <data name="AprilOxOpenSite" xml:space="preserve">
+    <value>Open connected site</value>
+  </data>
+  <data name="AprilOxCopied" xml:space="preserve">
+    <value>Pairing code copied to the clipboard.</value>
+  </data>
 </root>

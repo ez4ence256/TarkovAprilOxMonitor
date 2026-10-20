@@ -104,5 +104,14 @@
     <Setting Name="floatingTimerPanelShowRunThrough" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="aprilOxEnabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="aprilOxSiteUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://tarkov.aprilox.fr</Value>
+    </Setting>
+    <Setting Name="aprilOxCode" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

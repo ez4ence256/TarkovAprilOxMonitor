@@ -402,4 +402,31 @@
   <data name="RetrievedDataFromTarkovTracker" xml:space="preserve">
     <value>Récupéré la progression {0} niveau {1} {2} depuis Tarkov Tracker pour {3}</value>
   </data>
+  <data name="AprilOxTitle" xml:space="preserve">
+    <value>Tarkov Quest Planner (AprilOx)</value>
+  </data>
+  <data name="AprilOxHelp" xml:space="preserve">
+    <value>Envoie vos événements de quêtes et de position à Tarkov Quest Planner. Cliquez sur « Ouvrir le site connecté » ou collez le code d'appairage sur le site.</value>
+  </data>
+  <data name="AprilOxEnable" xml:space="preserve">
+    <value>Envoyer les événements à Tarkov Quest Planner</value>
+  </data>
+  <data name="AprilOxSiteUrl" xml:space="preserve">
+    <value>URL du site</value>
+  </data>
+  <data name="AprilOxSiteUrlInvalid" xml:space="preserve">
+    <value>Saisissez une URL http:// ou https:// valide.</value>
+  </data>
+  <data name="AprilOxCode" xml:space="preserve">
+    <value>Code d'appairage</value>
+  </data>
+  <data name="AprilOxRegenerate" xml:space="preserve">
+    <value>Régénérer le code</value>
+  </data>
+  <data name="AprilOxOpenSite" xml:space="preserve">
+    <value>Ouvrir le site connecté</value>
+  </data>
+  <data name="AprilOxCopied" xml:space="preserve">
+    <value>Code d'appairage copié dans le presse-papiers.</value>
+  </data>
 </root>

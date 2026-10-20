@@ -49,10 +49,10 @@
             // 
             // notifyIconTarkovMonitor
             // 
-            notifyIconTarkovMonitor.BalloonTipTitle = "Tarkov Monitor";
+            notifyIconTarkovMonitor.BalloonTipTitle = "Tarkov AprilOx Monitor";
             notifyIconTarkovMonitor.ContextMenuStrip = contextMenuStripTarkovMonitor;
             notifyIconTarkovMonitor.Icon = (Icon)resources.GetObject("notifyIconTarkovMonitor.Icon");
-            notifyIconTarkovMonitor.Text = "Tarkov Monitor";
+            notifyIconTarkovMonitor.Text = "Tarkov AprilOx Monitor";
             notifyIconTarkovMonitor.MouseDoubleClick += notifyIconTarkovMonitor_MouseDoubleClick;
             // 
             // contextMenuStripTarkovMonitor
@@ -66,7 +66,7 @@
             // 
             menuItemQuit.Name = "menuItemQuit";
             menuItemQuit.Size = new Size(210, 24);
-            menuItemQuit.Text = "Quit Tarkov Monitor";
+            menuItemQuit.Text = "Quit Tarkov AprilOx Monitor";
             menuItemQuit.Click += menuItemQuit_Click;
             // 
             // MainBlazorUI
@@ -82,7 +82,7 @@
             MinimumSize = new Size(450, 250);
             Name = "MainBlazorUI";
             Padding = new Padding(1);
-            Text = "Tarkov Monitor";
+            Text = "Tarkov AprilOx Monitor";
             Resize += MainBlazorUI_Resize;
             contextMenuStripTarkovMonitor.ResumeLayout(false);
             ResumeLayout(false);

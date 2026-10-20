@@ -14,11 +14,11 @@ namespace TarkovMonitor
         internal interface IGitHubAPI
         {
             [Get("/releases/latest")]
-            [Headers("user-agent: tarkov-monitor")]
+            [Headers("user-agent: TarkovAprilOxMonitor")]
             Task<ReleaseData> GetLatestRelease();
         }
 
-        private static readonly string repo = "the-hideout/TarkovMonitor";
+        private static readonly string repo = "ez4ence256/TarkovAprilOxMonitor";
         private static readonly System.Timers.Timer updateCheckTimer;
 
         private static readonly IGitHubAPI api = RestService.For<IGitHubAPI>($"https://api.github.com/repos/{repo}");
@@ -102,7 +102,7 @@ namespace TarkovMonitor
 
             return archives.FirstOrDefault(asset => string.Equals(
                     asset.name,
-                    "TarkovMonitor.zip",
+                    "TarkovAprilOxMonitor.zip",
                     StringComparison.OrdinalIgnoreCase))
                 ?? archives.FirstOrDefault();
         }

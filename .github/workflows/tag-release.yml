@@ -39,7 +39,7 @@ jobs:
       - name: Verify published application
         shell: pwsh
         run: |
-          $executable = "$Env:GITHUB_WORKSPACE\publish\TarkovMonitor.exe"
+          $executable = "$Env:GITHUB_WORKSPACE\publish\TarkovAprilOxMonitor.exe"
 
           if (-not (Test-Path -LiteralPath $executable)) {
             throw "Published executable was not found: $executable"
@@ -51,7 +51,7 @@ jobs:
         shell: pwsh
         run: |
           $publishDirectory = "$Env:GITHUB_WORKSPACE\publish"
-          $archivePath = "$Env:GITHUB_WORKSPACE\TarkovMonitor.zip"
+          $archivePath = "$Env:GITHUB_WORKSPACE\TarkovAprilOxMonitor.zip"
 
           Compress-Archive `
             -Path "$publishDirectory\*" `
@@ -66,7 +66,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # pin@v3.0.2
         with:
-          files: TarkovMonitor.zip
+          files: TarkovAprilOxMonitor.zip
           prerelease: true
           fail_on_unmatched_files: true
           generate_release_notes: true

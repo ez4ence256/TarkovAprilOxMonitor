@@ -119,7 +119,7 @@ namespace TarkovMonitor
             // Singleton message log used to record and display messages for TarkovMonitor
             diagnostics = diagnosticsService ?? new DiagnosticsService();
             messageLog = new MessageLog(diagnostics);
-            messageLog.AddMessage($"Tarkov Monitor v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
+            messageLog.AddMessage($"Tarkov AprilOx Monitor v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
 
             // Offers new releases as an in-place install rather than only a
             // link to the download page.

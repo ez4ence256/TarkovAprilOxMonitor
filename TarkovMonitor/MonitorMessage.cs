@@ -153,7 +153,7 @@ namespace TarkovMonitor
                 Buttons.Add(new("Report", () => {
                     var psi = new ProcessStartInfo
                     {
-                        FileName = "https://github.com/the-hideout/TarkovMonitor/issues",
+                        FileName = "https://github.com/ez4ence256/TarkovAprilOxMonitor/issues",
                         UseShellExecute = true,
                     };
                     Process.Start(psi);

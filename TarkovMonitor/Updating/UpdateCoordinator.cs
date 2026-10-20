@@ -72,8 +72,8 @@ namespace TarkovMonitor.Updating
             var canInstall = newVersion.Asset != null && UpdateInstaller.IsSupportedInstallation;
             var message = new MonitorMessage(
                 canInstall
-                    ? $"Tarkov Monitor {newVersion.Version} is available. Install it before reporting a bug."
-                    : $"Tarkov Monitor {newVersion.Version} is available. Download it before reporting a bug.",
+                    ? $"Tarkov AprilOx Monitor {newVersion.Version} is available. Install it before reporting a bug."
+                    : $"Tarkov AprilOx Monitor {newVersion.Version} is available. Download it before reporting a bug.",
                 "update",
                 newVersion.Uri.ToString(),
                 "View the release");
@@ -93,7 +93,7 @@ namespace TarkovMonitor.Updating
                 Color = MudBlazor.Color.Info,
                 Confirm = new MonitorMessageButtonConfirm(
                     "Install update",
-                    $"Tarkov Monitor will download version {newVersion.Version}, close, and reopen to finish installing."
+                    $"Tarkov AprilOx Monitor will download version {newVersion.Version}, close, and reopen to finish installing."
                         + "<br /><br />Do not do this while you are in a raid.",
                     "Install",
                     "Not now"),
@@ -128,7 +128,7 @@ namespace TarkovMonitor.Updating
             cancelButton.OnClick = () => cancellation.Cancel();
             message.Buttons.Remove(installButton);
             message.Buttons.Add(cancelButton);
-            SetMessageText(message, $"Preparing to download Tarkov Monitor {newVersion.Version}...");
+            SetMessageText(message, $"Preparing to download Tarkov AprilOx Monitor {newVersion.Version}...");
 
             _ = Task.Run(() => RunUpdateAsync(message, installButton, cancelButton, newVersion, asset, cancellation));
         }
@@ -155,7 +155,7 @@ namespace TarkovMonitor.Updating
                     cancellation.Token);
 
                 message.Buttons.Remove(cancelButton);
-                SetMessageText(message, $"Tarkov Monitor {newVersion.Version} is ready. Restarting...");
+                SetMessageText(message, $"Tarkov AprilOx Monitor {newVersion.Version} is ready. Restarting...");
 
                 UpdateInstaller.StartApply(staged);
                 requestExit();
@@ -170,7 +170,7 @@ namespace TarkovMonitor.Updating
                     message,
                     installButton,
                     cancelButton,
-                    $"Tarkov Monitor {newVersion.Version} could not be installed. Use the link above to download it.",
+                    $"Tarkov AprilOx Monitor {newVersion.Version} could not be installed. Use the link above to download it.",
                     newVersion);
                 messageLog.AddException(
                     "Installing the update failed; copy diagnostics for details.",
@@ -203,7 +203,7 @@ namespace TarkovMonitor.Updating
             // The original button carries the confirmation dialog and the
             // closure over this release, so it can simply be put back.
             message.Buttons.Add(installButton);
-            SetMessageText(message, $"{text} Tarkov Monitor {newVersion.Version} is still available.");
+            SetMessageText(message, $"{text} Tarkov AprilOx Monitor {newVersion.Version} is still available.");
         }
 
         private static void SetMessageText(MonitorMessage message, string text)
@@ -217,12 +217,12 @@ namespace TarkovMonitor.Updating
             return update.Stage switch
             {
                 UpdateStage.Downloading when update.Percent is int percent
-                    => $"Downloading Tarkov Monitor {version}... {percent}% ({DescribeSize(update.BytesReceived)} of {DescribeSize(update.TotalBytes)})",
+                    => $"Downloading Tarkov AprilOx Monitor {version}... {percent}% ({DescribeSize(update.BytesReceived)} of {DescribeSize(update.TotalBytes)})",
                 UpdateStage.Downloading
-                    => $"Downloading Tarkov Monitor {version}... {DescribeSize(update.BytesReceived)}",
-                UpdateStage.Verifying => $"Verifying the Tarkov Monitor {version} download...",
-                UpdateStage.Extracting => $"Unpacking Tarkov Monitor {version}...",
-                _ => $"Tarkov Monitor {version} is ready to install.",
+                    => $"Downloading Tarkov AprilOx Monitor {version}... {DescribeSize(update.BytesReceived)}",
+                UpdateStage.Verifying => $"Verifying the Tarkov AprilOx Monitor {version} download...",
+                UpdateStage.Extracting => $"Unpacking Tarkov AprilOx Monitor {version}...",
+                _ => $"Tarkov AprilOx Monitor {version} is ready to install.",
             };
         }
 

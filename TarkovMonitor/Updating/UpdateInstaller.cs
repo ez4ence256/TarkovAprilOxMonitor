@@ -37,7 +37,7 @@ namespace TarkovMonitor.Updating
     internal static class UpdateInstaller
     {
         internal const string ApplyUpdateSwitch = "--apply-update";
-        internal const string ExecutableName = "TarkovMonitor.exe";
+        internal const string ExecutableName = "TarkovAprilOxMonitor.exe";
         private const string StagingFolderName = "updates";
         private const string PayloadFolderName = "payload";
         private const string LauncherFolderName = "launcher";
@@ -52,7 +52,7 @@ namespace TarkovMonitor.Updating
         /// </summary>
         internal static string StagingRoot => Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            "TarkovMonitor",
+            "TarkovAprilOxMonitor",
             StagingFolderName);
 
         internal static string InstallDirectory => AppContext.BaseDirectory.TrimEnd(
@@ -241,7 +241,7 @@ namespace TarkovMonitor.Updating
 
         private static bool IsDirectoryWritable(string directory)
         {
-            var probePath = Path.Combine(directory, $".tarkovmonitor-write-probe-{Guid.NewGuid():N}");
+            var probePath = Path.Combine(directory, $".tarkovaprilox-write-probe-{Guid.NewGuid():N}");
             try
             {
                 using (File.Create(probePath, 1, FileOptions.DeleteOnClose))
@@ -291,7 +291,7 @@ namespace TarkovMonitor.Updating
                 // connections, so the default 100 second timeout is not enough.
                 Timeout = TimeSpan.FromMinutes(30),
             };
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("tarkov-monitor");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("TarkovAprilOxMonitor");
             return client;
         }
     }

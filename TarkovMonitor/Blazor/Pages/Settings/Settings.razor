@@ -105,7 +105,7 @@
         <MudPaper Class="app-surface pa-2 ma-2 mx-4" Elevation="3">
             <MudText Typo="Typo.h6" Class="d-flex align-center"><MudIcon Icon="@Icons.Material.Filled.Timer" Class="mr-2" /><span class="tm-card-heading-text">Timers</span></MudText>
             <MudSwitch @bind-Value="@FloatingTimerPanelSwitch" Label="Show the floating raid timer" Color="Color.Info" />
-            <MudText Typo="Typo.caption">Shows a movable timer in Tarkov Monitor after deployment finishes. It stays hidden on the Timers page.</MudText>
+            <MudText Typo="Typo.caption">Shows a movable timer in Tarkov AprilOx Monitor after deployment finishes. It stays hidden on the Timers page.</MudText>
             <MudText Typo="Typo.subtitle2" Class="mt-3">Displayed timers</MudText>
             <MudSwitch @bind-Value="@FloatingTimerShowTimeInRaidSwitch" Label="Elapsed raid time" Color="Color.Info" Class="ml-4" />
             <MudSwitch @bind-Value="@FloatingTimerShowRunThroughSwitch" Label="Run-through remaining" Color="Color.Info" Class="ml-4" />
@@ -170,7 +170,7 @@
                 <div class="tracker-key-manager">
                     <div class="tracker-state-note tracker-manager-warning" role="note">
                         <MudIcon Icon="@Icons.Material.Filled.WarningAmber" Size="Size.Small" Class="tracker-state-note-icon" />
-                        <span><b>Tarkov Monitor manages API tokens automatically.</b> Only change an assignment if you understand how EFT profiles and game modes are linked.</span>
+                        <span><b>Tarkov AprilOx Monitor manages API tokens automatically.</b> Only change an assignment if you understand how EFT profiles and game modes are linked.</span>
                     </div>
 
                     <div class="tracker-drawer mb-1">
@@ -183,7 +183,7 @@
                             <div class="tracker-drawer-content">
                                 <div class="tracker-state-note" role="note">
                                     <MudIcon Icon="@Icons.Material.Filled.Info" Size="Size.Small" Class="tracker-state-note-icon" />
-                                    <span><b>Verified, but unassigned.</b> Tarkov Monitor automatically assigns one eligible key to the first complete EFT account, profile, and game mode it observes. If more than one key is eligible, or you intentionally unbound a key, click Assign for the manual fallback.</span>
+                                    <span><b>Verified, but unassigned.</b> Tarkov AprilOx Monitor automatically assigns one eligible key to the first complete EFT account, profile, and game mode it observes. If more than one key is eligible, or you intentionally unbound a key, click Assign for the manual fallback.</span>
                                 </div>
                                 @if (PendingOrgKeys.Count == 0)
                                 {
@@ -256,7 +256,7 @@
                             <div class="tracker-drawer-content">
                                 <div class="tracker-state-note" role="note">
                                     <MudIcon Icon="@Icons.Material.Filled.VerifiedUser" Size="Size.Small" Class="tracker-state-note-icon tracker-state-note-icon--bound" />
-                                    <span><b>Verified and assigned.</b> Nothing else is required. Tarkov Monitor uses the key linked to your active EFT account, profile, and game mode. If it was assigned incorrectly—such as when using multiple EFT accounts—open Edit and choose Reassign. Set or rename account and profile nicknames as needed.</span>
+                                    <span><b>Verified and assigned.</b> Nothing else is required. Tarkov AprilOx Monitor uses the key linked to your active EFT account, profile, and game mode. If it was assigned incorrectly—such as when using multiple EFT accounts—open Edit and choose Reassign. Set or rename account and profile nicknames as needed.</span>
                                 </div>
                                 @if (BoundOrgKeys.Count == 0)
                                 {
@@ -443,7 +443,7 @@
             // be reported from here.
             if (await WindowHost.CheckForUpdates() == UpdateCheckResult.UpToDate)
             {
-                messageLog.AddMessage($"Tarkov Monitor {CurrentVersion} is the latest version.", "update");
+                messageLog.AddMessage($"Tarkov AprilOx Monitor {CurrentVersion} is the latest version.", "update");
             }
         }
         finally
@@ -589,7 +589,7 @@
             if (Properties.Settings.Default.language != value)
             {
                 LocalizationService.SetCulture(value);
-                messageLog.AddMessage("Restart Tarkov Monitor to finish applying the language change.", "warning");
+                messageLog.AddMessage("Restart Tarkov AprilOx Monitor to finish applying the language change.", "warning");
                 //Properties.Settings.Default.language = value; // handled by LocalizationService.SetCulture
                 //Properties.Settings.Default.Save();
                 //InvokeAsync(StateHasChanged); // should be unnecessary since we're handling the OnLanguageChanged event
@@ -907,7 +907,7 @@
                 {
                     TarkovTracker.ResetActiveProfile();
                     messageLog.AddMessage(
-                        $"Tarkov Tracker service change failed and could not be fully restored. Restart Tarkov Monitor before using Tarkov Tracker. Change error: {switchError.Message} Restore error: {rollbackError.Message}",
+                        $"Tarkov Tracker service change failed and could not be fully restored. Restart Tarkov AprilOx Monitor before using Tarkov Tracker. Change error: {switchError.Message} Restore error: {rollbackError.Message}",
                         "exception");
                     return;
                 }
@@ -1304,7 +1304,7 @@
             key,
             $"Remove {key.DisplayName} API token",
             "Delete this API token?",
-            "This removes the key from Tarkov Monitor on this PC. To restore it, you will need to import it again.",
+            "This removes the key from Tarkov AprilOx Monitor on this PC. To restore it, you will need to import it again.",
             "Remove",
             Icons.Material.Filled.DeleteOutline,
             true))
@@ -1322,7 +1322,7 @@
             if (key.IsBound)
             {
                 AddProtectedKeyMessage(
-                    $"Removed the verified {key.DisplayName} TarkovTracker.org API token from Tarkov Monitor.",
+                    $"Removed the verified {key.DisplayName} TarkovTracker.org API token from Tarkov AprilOx Monitor.",
                     ("Previous Account ID", key.AccountId),
                     ("Previous Profile ID", key.ProfileId));
             }

@@ -38,12 +38,12 @@ namespace TarkovMonitor.Updating
                 log.AppendLine(exception.ToString());
                 WriteLog(options, log);
                 MessageBox.Show(
-                    "Tarkov Monitor could not install the update, and the previous version was left in place."
+                    "Tarkov AprilOx Monitor could not install the update, and the previous version was left in place."
                         + Environment.NewLine + Environment.NewLine
                         + exception.Message
                         + Environment.NewLine + Environment.NewLine
                         + "Download the new version manually from the releases page.",
-                    "Tarkov Monitor update failed",
+                    "Tarkov AprilOx Monitor update failed",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 TryRelaunch(options);
@@ -120,7 +120,7 @@ namespace TarkovMonitor.Updating
                 using var process = Process.GetProcessById(pid);
                 if (!process.WaitForExit(TimeSpan.FromSeconds(ExitWaitSeconds)))
                 {
-                    throw new TimeoutException("Tarkov Monitor did not close, so the update was not installed.");
+                    throw new TimeoutException("Tarkov AprilOx Monitor did not close, so the update was not installed.");
                 }
                 log.AppendLine($"Process {pid} exited.");
             }

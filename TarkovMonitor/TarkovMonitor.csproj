@@ -8,6 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Resources\TarkovDev.ico</ApplicationIcon>
     <AssemblyVersion>2.2.1.0</AssemblyVersion>
+    <AssemblyName>TarkovAprilOxMonitor</AssemblyName>
+    <RootNamespace>TarkovMonitor</RootNamespace>
+    <Product>Tarkov AprilOx Monitor</Product>
+    <AssemblyTitle>Tarkov AprilOx Monitor</AssemblyTitle>
+    <Description>Unofficial fork of TarkovMonitor by the-hideout (GPL-3.0)</Description>
   </PropertyGroup>
 
   <ItemGroup>

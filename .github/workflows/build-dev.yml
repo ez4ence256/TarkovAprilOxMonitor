@@ -37,7 +37,7 @@ jobs:
       - name: Verify published application
         shell: pwsh
         run: |
-          $executable = "$Env:GITHUB_WORKSPACE\publish\TarkovMonitor.exe"
+          $executable = "$Env:GITHUB_WORKSPACE\publish\TarkovAprilOxMonitor.exe"
 
           if (-not (Test-Path -LiteralPath $executable)) {
             throw "Published executable was not found: $executable"

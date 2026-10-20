@@ -155,7 +155,7 @@ public sealed class DiagnosticsService
     {
         DiagnosticsDirectory = diagnosticsDirectory ?? Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "TarkovMonitor",
+                "TarkovAprilOxMonitor",
                 "Diagnostics");
     }
 

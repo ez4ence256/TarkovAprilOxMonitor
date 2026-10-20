@@ -394,6 +394,7 @@
             <MudText Typo="Typo.caption">@LocalizationService.GetString("AprilOxHelp")</MudText>
             <div>
                 <MudSwitch @bind-Value="@AprilOxEnabled" Label="@LocalizationService.GetString("AprilOxEnable")" Color="Color.Info" />
+                <MudSwitch @bind-Value="@AprilOxDeleteScreenshots" Label="@LocalizationService.GetString("AprilOxDeleteScreenshots")" Color="Color.Info" />
             </div>
             <MudTextField @bind-Value="@AprilOxSiteUrl" Immediate="true" Error="@(AprilOxSiteUrlError != null)" ErrorText="@AprilOxSiteUrlError" Label="@LocalizationService.GetString("AprilOxSiteUrl")" Variant="Variant.Outlined" Margin="Margin.Dense" Class="tm-input tm-input--full"></MudTextField>
             <MudTextField Value="@AprilOxCode" ReadOnly="true" Label="@LocalizationService.GetString("AprilOxCode")" Variant="Variant.Outlined" Margin="Margin.Dense" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.ContentCopy" OnAdornmentClick="CopyAprilOxCode" Class="tm-input tm-input--full"></MudTextField>
@@ -1600,6 +1601,15 @@
             Properties.Settings.Default.aprilOxEnabled = value;
             Properties.Settings.Default.Save();
             _ = AprilOxClient.SendHelloAsync();
+        }
+    }
+    public bool AprilOxDeleteScreenshots
+    {
+        get => Properties.Settings.Default.aprilOxDeleteScreenshots;
+        set
+        {
+            Properties.Settings.Default.aprilOxDeleteScreenshots = value;
+            Properties.Settings.Default.Save();
         }
     }
     public string AprilOxCode => Properties.Settings.Default.aprilOxCode;

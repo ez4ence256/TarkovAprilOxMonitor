@@ -438,6 +438,9 @@
   <data name="AprilOxOpenSite" xml:space="preserve">
     <value>Open connected site</value>
   </data>
+  <data name="AprilOxDeleteScreenshots" xml:space="preserve">
+    <value>Delete my screenshots 30 min later (only those taken while the app is open, sent to the Recycle Bin). Captures still waiting when the app closes are kept.</value>
+  </data>
   <data name="AprilOxCopied" xml:space="preserve">
     <value>Pairing code copied to the clipboard.</value>
   </data>

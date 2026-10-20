@@ -426,6 +426,9 @@
   <data name="AprilOxOpenSite" xml:space="preserve">
     <value>Ouvrir le site connecté</value>
   </data>
+  <data name="AprilOxDeleteScreenshots" xml:space="preserve">
+    <value>Supprimer mes captures 30 min après (seulement celles prises pendant que l'app est ouverte, envoyées à la Corbeille). Les captures encore en attente à la fermeture de l'app sont conservées.</value>
+  </data>
   <data name="AprilOxCopied" xml:space="preserve">
     <value>Code d'appairage copié dans le presse-papiers.</value>
   </data>

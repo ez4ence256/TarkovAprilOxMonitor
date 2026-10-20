@@ -466,5 +466,17 @@ namespace TarkovMonitor.Properties {
                 this["aprilOxCode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool aprilOxDeleteScreenshots {
+            get {
+                return ((bool)(this["aprilOxDeleteScreenshots"]));
+            }
+            set {
+                this["aprilOxDeleteScreenshots"] = value;
+            }
+        }
     }
 }

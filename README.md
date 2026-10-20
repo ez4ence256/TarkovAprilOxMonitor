@@ -21,6 +21,7 @@ Changes made to the original TarkovMonitor (GPL-3.0 section 5a):
 - New settings `aprilOxEnabled`, `aprilOxSiteUrl`, `aprilOxCode` and a "Tarkov Quest Planner (AprilOx)" card in Settings (enable switch, site URL, pairing code with Copy / Regenerate, "Open connected site").
 - New `AprilOxClient` that POSTs task (started / finished / failed), map and position events, plus a `hello` event, to `{siteUrl}/api/monitor/{code}`. Events are sent only for live game activity (never while old logs are read at startup) and only when the game mode (regular or PVE) is known.
 - The "Read past log files" dialog can now send the past quest statuses to Tarkov Quest Planner (default when connected, no TarkovTracker token needed) as one batched `tasks` event; the TarkovTracker.org target is unchanged.
+- New setting `aprilOxDeleteScreenshots` (on by default): screenshots taken while the app is running, in the EFT screenshots folder and matching EFT's file name pattern, are sent to the Recycle Bin 30 minutes after creation. Pending deletions are kept in memory only, so screenshots still waiting when the app closes are not deleted.
 - GitHub workflows and this README adapted to the new names.
 
 ## Connect to Tarkov Quest Planner

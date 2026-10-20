@@ -453,12 +453,41 @@ namespace TarkovMonitor
                 SetupScreenshotWatcher();
             }
         }
+        private const string ScreenshotNamePattern = @"\d{4}-\d{2}-\d{2}\[\d{2}-\d{2}\]_?(?<position>.+) \(\d\)\.png";
+
+        // Pending deletions live in memory only: files still waiting when the app closes are kept.
+        private async void ScheduleScreenshotDeletion(string path)
+        {
+            try
+            {
+                await Task.Delay(TimeSpan.FromMinutes(30));
+                if (!Properties.Settings.Default.aprilOxDeleteScreenshots || !File.Exists(path))
+                {
+                    return;
+                }
+                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(path, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or OperationCanceledException)
+            {
+                // locked or already gone: leave it
+            }
+            catch (Exception ex)
+            {
+                ExceptionThrown?.Invoke(this, new ExceptionEventArgs(ex, "deleting an old screenshot"));
+            }
+        }
+
         private void ScreenshotWatcher_Created(object sender, FileSystemEventArgs e)
         {
             try
             {
                 string filename = e.Name ?? "";
-                var match = Regex.Match(filename, @"\d{4}-\d{2}-\d{2}\[\d{2}-\d{2}\]_?(?<position>.+) \(\d\)\.png");
+                var match = Regex.Match(filename, ScreenshotNamePattern);
+                if (match.Success && Properties.Settings.Default.aprilOxDeleteScreenshots
+                    && string.Equals(Path.GetDirectoryName(e.FullPath), ScreenshotsPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    ScheduleScreenshotDeletion(e.FullPath);
+                }
                 if (!match.Success)
                 {
                     return;
